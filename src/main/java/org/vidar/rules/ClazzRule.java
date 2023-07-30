@@ -13,7 +13,7 @@ public class ClazzRule {
     private String name;
     private String access;
     private String type;
-    private String extend;
+    private List<String> extendsList;
     private List<String> implementsList;
     private List<String> annotations;
     private List<Field> fields;

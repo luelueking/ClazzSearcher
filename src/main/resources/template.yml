@@ -10,7 +10,8 @@ name: "TemplateClazzName"
 
 type: class interface enum annotation
 
-extend: java.lang.Object
+extendsList:
+  - java.lang.Object
 
 implementsList:
   - interface1

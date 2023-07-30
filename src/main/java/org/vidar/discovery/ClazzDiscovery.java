@@ -1,5 +1,6 @@
 package org.vidar.discovery;
 
+import org.checkerframework.checker.units.qual.A;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.vidar.data.*;
@@ -29,21 +30,31 @@ public class ClazzDiscovery {
         HashMap<MethodReference.Handle, GraphCall> callMap = DataLoader.loadCalls();
         LOGGER.info("加载方法调用信息完毕");
 
-
-
         LOGGER.info("开始寻找目标类...");
         ArrayList<Object> res = new ArrayList<>();
-        List<String> implementsList = clazzRule.getImplementsList();
-        LOGGER.info("你所寻找的类继承的接口有：");
-        implementsList.forEach(LOGGER::info);
-        if (implementsList.size() != 0) {
-            Iterator<Map.Entry<ClassReference.Handle, ClassReference>> iterator = classMap.entrySet().iterator();
+        ArrayList<String> parentLists = new ArrayList<>();
+        if (clazzRule.getImplementsList().size() != 0) {
+            LOGGER.info("你所寻找的class实现的接口有：");
+            clazzRule.getImplementsList().forEach( p -> {
+                LOGGER.info(p);
+                parentLists.add(p);
+            });
+        }
+        if (clazzRule.getExtendsList().size() != 0) {
+            LOGGER.info("你所寻找的class继承的类有：");
+            clazzRule.getExtendsList().forEach( p -> {
+                LOGGER.info(p);
+                parentLists.add(p);
+            });
+        }
 
+        if (parentLists.size() != 0) {
+            Iterator<Map.Entry<ClassReference.Handle, ClassReference>> iterator = classMap.entrySet().iterator();
             while (iterator.hasNext()) {
                 Map.Entry<ClassReference.Handle, ClassReference> next = iterator.next();
                 ClassReference.Handle key = next.getKey();
                 AtomicBoolean is = new AtomicBoolean(true);
-                for (String s : implementsList) {
+                for (String s : parentLists) {
                     if (!inheritanceMap.isSubclassOf(key,new ClassReference.Handle(s))) {
                         is.set(false);
                     }
