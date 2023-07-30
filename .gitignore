@@ -10,8 +10,10 @@ target/
 .idea/libraries/
 *.iws
 *.iml
-*.ipr
+*.iprgit add .gitignore
+     git commit -m "添加 .gitignore 文件"
 
+*.dat
 ### Eclipse ###
 .apt_generated
 .classpath
