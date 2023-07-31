@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.vidar.discovery.ClassResourceEnumerator;
 import org.vidar.discovery.ClazzDiscovery;
-import org.vidar.discovery.MethodDiscovery;
+import org.vidar.discovery.MetaDiscovery;
 import org.vidar.rules.ClazzRule;
 import org.vidar.utils.LoaderUtil;
 import org.vidar.utils.YamlUtil;
@@ -109,7 +109,7 @@ public class ClazzSearchApplication {
                 || !Files.exists(Paths.get("inheritanceMap.dat"))
                 || !Files.exists(Paths.get("calls.dat"))) {
             LOGGER.info("Running method discovery...");
-            MethodDiscovery methodDiscovery = new MethodDiscovery();
+            MetaDiscovery methodDiscovery = new MetaDiscovery();
             methodDiscovery.discover(classResourceEnumerator);
             // 保存类信息、方法信息、继承实现信息
             methodDiscovery.save();

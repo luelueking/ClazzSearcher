@@ -14,8 +14,8 @@ import java.util.*;
 /**
  * @author zhchen
  */
-public class MethodDiscovery {
-    private static final Logger LOGGER = LoggerFactory.getLogger(MethodDiscovery.class);
+public class MetaDiscovery {
+    private static final Logger LOGGER = LoggerFactory.getLogger(MetaDiscovery.class);
 
     private final List<ClassReference> discoveredClasses = new ArrayList<>();
     private final List<MethodReference> discoveredMethods = new ArrayList<>();
