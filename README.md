@@ -1,5 +1,7 @@
 # ClazzSearcher
 一款使用Yaml定义搜索规则来搜索Class的工具
+### TODOList
+- 还很多没做，还在开发ing
 ### Quick Start
 下面是yml的规则搜索模版(如果不需要引入某条rule则不写)
 ```yaml
@@ -44,8 +46,7 @@ methods: # target拥有的method
     "desc": "()Ljava/lang/String;", # method描述
     "access": false,
     "call" : [ # method中call的方法
-      "java/lang/reflect/Method.invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;",
-      "org/xml/sax/helpers/XMLFilterImpl.parse(Lorg/xml/sax/InputSource;)V",
+      {}
     ]
 
   }
@@ -55,7 +56,7 @@ methods: # target拥有的method
     "desc": "(Ljava/io/Reader;)Ljava/lang/Object;",
     "access": true,
     "call" : [
-      "javax/xml/ws/EndpointReference.toString()Ljava/lang/String;"
+      {},{},{}
     ]
   }
 ```
@@ -86,5 +87,32 @@ extendsList:
 找到一个类：ClassReference.Handle(name=org/springframework/web/servlet/HttpServletBean$ServletConfigPropertyValues)
 ```
 
-### TODOList
-- 还很多没做，还在开发ing
+如有下面这段规则
+```yaml
+access : public
+type: class
+methods:
+  - {
+    "name": "excludeMBeanIfNecessary",
+    "desc": "(Ljava/lang/Object;Ljava/lang/String;Lorg/springframework/context/ApplicationContext;)V",
+    "access": "private",
+    "isStatic": false,
+    "calls": [
+      {
+        "classRef": "org/springframework/jmx/export/MBeanExporter",
+        "name": "addExcludedBean",
+        "desc": "(Ljava/lang/String;)V"
+      }
+    ]
+  }
+```
+运行`ClazzSearchApplication`加上参数`--f example.yml --boot d3forest-1.0-SNAPSHOT.jar`
+```
+[main] INFO org.vidar.discovery.ClazzDiscovery - 加载所有方法信息完毕
+[main] INFO org.vidar.discovery.ClazzDiscovery - 加载所有类信息完毕
+[main] INFO org.vidar.discovery.ClazzDiscovery - 加载所有父子类、超类、实现类关系
+[main] INFO org.vidar.discovery.ClazzDiscovery - 加载方法调用信息完毕
+[main] INFO org.vidar.discovery.ClazzDiscovery - 开始寻找目标类...
+[main] INFO org.vidar.discovery.ClazzDiscovery - 你希望target中存在：ClazzRule.Method(clazz=null, name=excludeMBeanIfNecessary, desc=(Ljava/lang/Object;Ljava/lang/String;Lorg/springframework/context/ApplicationContext;)V, access=private, isStatic=false, calls=[ClazzRule.Call(classRef=org/springframework/jmx/export/MBeanExporter, name=addExcludedBean, desc=(Ljava/lang/String;)V)])方法
+找到一个类：ClassReference.Handle(name=org/springframework/boot/autoconfigure/jdbc/JndiDataSourceAutoConfiguration)
+```
