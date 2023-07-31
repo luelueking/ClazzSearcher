@@ -1,0 +1,53 @@
+importList:
+  - java.io.File
+  - java.io.IOException
+  - org.apache.log4j.Level
+  - org.*
+
+access : public/protected/default/private
+
+name: "TemplateClazzName"
+
+type: class interface enum annotation
+
+extendsList:
+  - java.lang.Object
+
+implementsList:
+  - interface1
+  - interface2
+annotations:
+  - annotation1
+  - annotation2
+
+fields:
+  - {
+    "name": "field1",
+    "type": "java.lang.String",
+    "access": public/protected/default/private,
+  }
+  - {
+    "name": "field2",
+    "type": "java.lang.Object",
+    "access": public/protected/default/private,
+  }
+methods:
+  - {
+    "clazz": "clazz1",
+    "name": "method1",
+    "desc": "()Ljava/lang/String;",
+    "isStatic": true,
+    "access": false,
+    "call" : [
+      {},{}
+    ]
+  }
+  - {
+    "clazz": "clazz1",
+    "name": "method2",
+    "desc": "(Ljava/io/Reader;)Ljava/lang/Object;",
+    "access": true,
+    "call" : [
+      {},{},{}
+    ]
+  }
