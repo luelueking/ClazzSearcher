@@ -5,6 +5,7 @@ import lombok.Data;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author zhchen
@@ -20,6 +21,23 @@ public class GraphCall {
 
     public void addCallMethod(MethodReference.Handle handle) {
         this.callMethods.add(handle);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        GraphCall graphCall = (GraphCall) o;
+        return method.equals(graphCall.method);
+    }
+
+    @Override
+    public int hashCode() {
+        return method.hashCode();
     }
 
     public static class Factory implements DataFactory<GraphCall> {

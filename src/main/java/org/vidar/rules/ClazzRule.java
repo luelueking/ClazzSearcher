@@ -34,7 +34,13 @@ public class ClazzRule {
         private String desc;
         private String access;
         private Boolean isStatic;
-        private List<String> call;
+        private List<Call> calls;
     }
 
+    @Data
+    public static class Call {
+        private String classRef;
+        private String name;
+        private String desc;
+    }
 }

@@ -27,11 +27,8 @@ public class ClazzDiscovery {
         InheritanceMap inheritanceMap = InheritanceMap.load();
         LOGGER.info("加载所有父子类、超类、实现类关系");
         // 加载方法调用信息
-        HashMap<MethodReference.Handle, GraphCall> callMap = DataLoader.loadCalls();
+        Map<MethodReference.Handle, GraphCall> callMap = DataLoader.loadCalls();
         LOGGER.info("加载方法调用信息完毕");
-
-
-
 
 
         LOGGER.info("开始寻找目标类...");
@@ -75,25 +72,40 @@ public class ClazzDiscovery {
         // 限定method
         List<ClazzRule.Method> methods = clazzRule.getMethods();
         if (methods.size() != 0) {
+            methods.forEach(m ->{LOGGER.info("你希望target中存在：" + m + "方法");});
             Iterator<Map.Entry<MethodReference.Handle, MethodReference>> iterator = methodMap.entrySet().iterator();
             while (iterator.hasNext()) {
                 Map.Entry<MethodReference.Handle, MethodReference> next = iterator.next();
                 MethodReference.Handle key = next.getKey();
                 AtomicBoolean is = new AtomicBoolean(false);
                 for (ClazzRule.Method m : methods) {
-                    if (!key.getName().equals(m.getName())) {
+                    if (m.getName() != null && !key.getName().equals(m.getName())) {
                         continue;
                     }
-                    if (!key.getDesc().equals(m.getDesc())) {
+                    if (m.getDesc() != null && !key.getDesc().equals(m.getDesc())) {
                         continue;
                     }
-                    if (methodMap.get(key).isStatic() != m.getIsStatic()) {
+                    if (m.getIsStatic() != null && methodMap.get(key).isStatic() != m.getIsStatic()) {
                         continue;
                     }
-                    if (!methodMap.get(key).getAccessModifier().equals(m.getAccess())) {
+                    if (m.getAccess() != null && !methodMap.get(key).getAccessModifier().equals(m.getAccess())) {
                         continue;
                     }
                     is.set(true);
+                    if (m.getCalls() != null) {
+                        GraphCall graphCall = callMap.get(key);
+                        List<MethodReference.Handle> callMethods = graphCall.getCallMethods();
+                        out: for (ClazzRule.Call call : m.getCalls()) {
+                            for (MethodReference.Handle callMethod : callMethods) {
+                                if (callMethod.getClassReference().getName().equals(call.getClassRef()) &&
+                                        callMethod.getName().equals(call.getName()) &&
+                                        callMethod.getDesc().equals(call.getDesc())) {
+                                    continue out;
+                                }
+                            }
+                            is.set(false);
+                        }
+                    }
                     break;
                 }
                 if (is.get()) {

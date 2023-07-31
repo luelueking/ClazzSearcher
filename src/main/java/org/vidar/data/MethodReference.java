@@ -45,7 +45,7 @@ public class MethodReference {
                 return false;
             }
             Handle handle = (Handle) o;
-            return handle.equals(classReference)
+            return handle.classReference.equals(classReference)
                     && handle.name.equals(name)
                     && handle.desc.equals(desc);
         }
