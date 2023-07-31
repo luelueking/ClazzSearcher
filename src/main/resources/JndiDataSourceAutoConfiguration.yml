@@ -1,0 +1,8 @@
+methods:
+  - {
+    "name": "excludeMBeanIfNecessary",
+    "desc": "(Ljava/lang/Object;Ljava/lang/String;Lorg/springframework/context/ApplicationContext;)V",
+    "access": "private",
+    "isStatic": false,
+    "call" : []
+  }

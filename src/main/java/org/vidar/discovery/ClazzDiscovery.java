@@ -30,17 +30,21 @@ public class ClazzDiscovery {
         HashMap<MethodReference.Handle, GraphCall> callMap = DataLoader.loadCalls();
         LOGGER.info("加载方法调用信息完毕");
 
+
+
+
+
         LOGGER.info("开始寻找目标类...");
-        ArrayList<Object> res = new ArrayList<>();
+        Set<Object> res = new HashSet<>();
         ArrayList<String> parentLists = new ArrayList<>();
-        if (clazzRule.getImplementsList().size() != 0) {
+        if (clazzRule.getImplementsList() != null && clazzRule.getImplementsList().size() != 0) {
             LOGGER.info("你所寻找的class实现的接口有：");
             clazzRule.getImplementsList().forEach( p -> {
                 LOGGER.info(p);
                 parentLists.add(p);
             });
         }
-        if (clazzRule.getExtendsList().size() != 0) {
+        if (clazzRule.getExtendsList() != null && clazzRule.getExtendsList().size() != 0) {
             LOGGER.info("你所寻找的class继承的类有：");
             clazzRule.getExtendsList().forEach( p -> {
                 LOGGER.info(p);
@@ -48,6 +52,7 @@ public class ClazzDiscovery {
             });
         }
 
+        // 限定parent
         if (parentLists.size() != 0) {
             Iterator<Map.Entry<ClassReference.Handle, ClassReference>> iterator = classMap.entrySet().iterator();
             while (iterator.hasNext()) {
@@ -59,9 +64,41 @@ public class ClazzDiscovery {
                         is.set(false);
                     }
                 }
-                if (is.get() == true) {
+                if (is.get()) {
                     res.add(key);
                     System.out.println("找到一个类：" + key);
+                }
+            }
+        }
+
+
+        // 限定method
+        List<ClazzRule.Method> methods = clazzRule.getMethods();
+        if (methods.size() != 0) {
+            Iterator<Map.Entry<MethodReference.Handle, MethodReference>> iterator = methodMap.entrySet().iterator();
+            while (iterator.hasNext()) {
+                Map.Entry<MethodReference.Handle, MethodReference> next = iterator.next();
+                MethodReference.Handle key = next.getKey();
+                AtomicBoolean is = new AtomicBoolean(false);
+                for (ClazzRule.Method m : methods) {
+                    if (!key.getName().equals(m.getName())) {
+                        continue;
+                    }
+                    if (!key.getDesc().equals(m.getDesc())) {
+                        continue;
+                    }
+                    if (methodMap.get(key).isStatic() != m.getIsStatic()) {
+                        continue;
+                    }
+                    if (!methodMap.get(key).getAccessModifier().equals(m.getAccess())) {
+                        continue;
+                    }
+                    is.set(true);
+                    break;
+                }
+                if (is.get()) {
+                    res.add(key.getClassReference());
+                    System.out.println("找到一个类：" + key.getClassReference());
                 }
             }
         }

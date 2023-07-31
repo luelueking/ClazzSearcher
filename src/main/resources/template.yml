@@ -36,12 +36,12 @@ methods:
     "clazz": "clazz1",
     "name": "method1",
     "desc": "()Ljava/lang/String;",
+    "isStatic": true,
     "access": false,
     "call" : [
       "java/lang/reflect/Method.invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;",
       "org/xml/sax/helpers/XMLFilterImpl.parse(Lorg/xml/sax/InputSource;)V",
     ]
-
   }
   - {
     "clazz": "clazz1",

@@ -2,8 +2,6 @@ package org.vidar.data;
 
 import lombok.Data;
 
-import java.util.Objects;
-
 /**
  * @author zhchen
  */
@@ -13,12 +11,14 @@ public class MethodReference {
     private final String name;
     private final String desc;
     private final boolean isStatic;
+    private final String accessModifier;
 
-    public MethodReference(ClassReference.Handle classReference, String name, String desc, boolean isStatic) {
+    public MethodReference(ClassReference.Handle classReference, String name, String desc, boolean isStatic, String accessModifier) {
         this.classReference = classReference;
         this.name = name;
         this.desc = desc;
         this.isStatic = isStatic;
+        this.accessModifier = accessModifier;
     }
 
     public Handle getHandle() {
@@ -66,7 +66,8 @@ public class MethodReference {
                     new ClassReference.Handle(fields[0]),
                     fields[1],
                     fields[2],
-                    Boolean.parseBoolean(fields[3]));
+                    Boolean.parseBoolean(fields[3]),
+                    fields[4]);
         }
 
         @Override
@@ -76,6 +77,7 @@ public class MethodReference {
                     obj.name,
                     obj.desc,
                     Boolean.toString(obj.isStatic),
+                    obj.accessModifier
             };
         }
     }

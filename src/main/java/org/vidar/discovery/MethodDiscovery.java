@@ -110,15 +110,27 @@ public class MethodDiscovery {
             }
             return super.visitField(access, name, desc, signature, value);
         }
-
+        private String getAccessModifier(int access) {
+            if ((access & Opcodes.ACC_PUBLIC) != 0) {
+                return "public";
+            } else if ((access & Opcodes.ACC_PRIVATE) != 0) {
+                return "private";
+            } else if ((access & Opcodes.ACC_PROTECTED) != 0) {
+                return "protected";
+            } else {
+                return "default";
+            }
+        }
         @Override
         public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
             boolean isStatic = (access & Opcodes.ACC_STATIC) != 0;
+            String accessModifier = getAccessModifier(access);
             MethodReference methodReference = new MethodReference(
                     classHandle,//类名
                     name,
                     desc,
-                    isStatic);
+                    isStatic,
+                    accessModifier);
             //找到一个方法，添加到缓存
             discoveredMethods.add(methodReference);
             MethodReference.Handle handle = methodReference.getHandle();

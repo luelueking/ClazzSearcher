@@ -32,7 +32,8 @@ public class ClazzRule {
         private String clazz;
         private String name;
         private String desc;
-        private boolean access;
+        private String access;
+        private Boolean isStatic;
         private List<String> call;
     }
 
