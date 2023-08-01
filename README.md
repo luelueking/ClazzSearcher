@@ -30,7 +30,7 @@ methods:               # target所拥有的method方法
   - {
     "name": "m1",      # method的name，例如"excludeMBeanIfNecessary"
     "desc": "desc1",   # method的描述符，例如"(Ljava/lang/Object;)V"
-    "access": "public",# method的访问修饰符
+    "access": "public", # method的访问修饰符
     "isStatic": false, # method是否是静态方法
     "calls": [         # method中调用了哪些方法
       {
