@@ -102,3 +102,8 @@ methods:
 [main] INFO org.vidar.discovery.ClazzDiscovery - 你希望target中存在：ClazzRule.Method(clazz=null, name=excludeMBeanIfNecessary, desc=(Ljava/lang/Object;Ljava/lang/String;Lorg/springframework/context/ApplicationContext;)V, access=private, isStatic=false, calls=[ClazzRule.Call(classRef=org/springframework/jmx/export/MBeanExporter, name=addExcludedBean, desc=(Ljava/lang/String;)V)])方法
 找到一个类：ClassReference.Handle(name=org/springframework/boot/autoconfigure/jdbc/JndiDataSourceAutoConfiguration)
 ```
+### 参数说明
+--resume 是否使用已建立的数据缓存
+--f 指定配置yml
+--onlyJDK 是否只在jdk中筛选
+--boot 是否是springboot的jar
