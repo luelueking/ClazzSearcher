@@ -108,3 +108,15 @@ methods:
 - --f 指定配置yml
 - --onlyJDK 是否只在jdk中筛选
 - --boot 是否是springboot的jar
+### 附录
+#### field access计算表
+| 访问修饰符 | 数值表示 |
+| --------- | ------- |
+| ACC_PUBLIC | 1       |
+| ACC_PRIVATE | 2      |
+| ACC_PROTECTED | 4    |
+| ACC_STATIC | 8       |
+| ACC_FINAL | 16       |
+| ACC_VOLATILE | 64    |
+| ACC_TRANSIENT | 128  |
+| ACC_SYNTHETIC | 4096 |
