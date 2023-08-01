@@ -184,10 +184,15 @@ public class ClazzDiscovery {
                 for (ClassReference.Handle clz : res) {
                     ClassReference classReference = classMap.get(clz);
                     Set<String> clzAnnotations = classReference.getAnnotations();
+                    boolean hasAnno = false;
                     for (String annotation : annotations) {
-                        if (!clzAnnotations.contains(annotation)) {
-                            toRemove.add(clz);
+                        if (clzAnnotations.contains(annotation)) {
+                            hasAnno = true;
+                            break;
                         }
+                    }
+                    if (!hasAnno) {
+                        toRemove.add(clz);
                     }
                 }
                 if (toRemove.size() != 0) {
@@ -201,18 +206,13 @@ public class ClazzDiscovery {
                 for (Map.Entry<ClassReference.Handle, ClassReference> next : classMap.entrySet()) {
                     ClassReference clzRef = next.getValue();
                     Set<String> clzAnnotations = clzRef.getAnnotations();
-                    boolean hasAll = true;
                     if (clzAnnotations != null && clzAnnotations.size() != 0) {
                         for (String annotation : annotations) {
-                            // 必须含有所有注解，有一个没有都不行
-                            if (!clzAnnotations.contains(annotation)) {
-                                hasAll = false;
-                                break;
+                            // 或逻辑,只要存在其中一个注解即可
+                            if (clzAnnotations.contains(annotation)) {
+                                res.add(next.getKey());
                             }
                         }
-                    }
-                    if (hasAll) {
-                        res.add(next.getKey());
                     }
                 }
             }
@@ -318,9 +318,9 @@ public class ClazzDiscovery {
                         out:
                         for (MethodReference.Handle callMethod : callMethods) {
                             for (ClazzRule.Call call : m.getCalls()) {
-                                if (callMethod.getClassReference().getName()!=null ? callMethod.getClassReference().getName().equals(call.getClassRef()):true &&
-                                        callMethod.getName()!=null ? callMethod.getName().equals(call.getName()):true &&
-                                        callMethod.getDesc()!=null ? callMethod.getDesc().equals(call.getDesc()):true) {
+                                if (callMethod.getClassReference().getName() != null ? callMethod.getClassReference().getName().equals(call.getClassRef()) : true &&
+                                        callMethod.getName() != null ? callMethod.getName().equals(call.getName()) : true &&
+                                        callMethod.getDesc() != null ? callMethod.getDesc().equals(call.getDesc()) : true) {
                                     isCalls = true;
                                     break out;
                                 }
