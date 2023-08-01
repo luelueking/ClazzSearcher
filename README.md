@@ -5,12 +5,6 @@
 ### Quick Start
 下面是yml的规则搜索模版(如果不需要引入某条rule则不写)
 ```yaml
-importList: # target中所import的类,支持正则
-  - java.io.File
-  - java.io.IOException
-  - org.apache.log4j.Level
-  - org.*
-
 access : public/protected/default/private # target的访问修饰符
 
 name: "TemplateClazzName" # target的类名,支持正则匹配
