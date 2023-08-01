@@ -1,7 +1,5 @@
 # ClazzSearcher
 一款使用Yaml定义搜索规则来搜索Class的工具
-### TODOList
-- 还很多没做，还在开发ing
 ### Quick Start(快速开始)
 下面是yml的规则搜索模版(如果不需要引入某条rule则不写)
 ```yaml
@@ -120,3 +118,7 @@ methods:
 | ACC_VOLATILE | 64    |
 | ACC_TRANSIENT | 128  |
 | ACC_SYNTHETIC | 4096 |
+### TODO List
+- [x] 正则查询匹配
+- [ ] 更友好的字符格式
+- [ ] 交互式查询
