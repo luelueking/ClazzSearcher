@@ -110,7 +110,7 @@ methods:
 找到一个类：ClassReference.Handle(name=org/springframework/boot/autoconfigure/jdbc/JndiDataSourceAutoConfiguration)
 ```
 ### 实战例子
-寻找一些lookup的sink点
+#### 寻找一些lookup的sink点
 ``` yaml
 methods:
   - {
@@ -151,6 +151,34 @@ ClazzRule(name=null, isInterface=null, extendsList=null, implementsList=null, an
 ClassReference.Handle(name=com/sun/rowset/internal/CachedRowSetReader)
 ClassReference.Handle(name=com/sun/rowset/JdbcRowSetImpl)
 ```
+#### 利用注解来寻找jar中的一些路由
+```yaml
+annotations:
+  - "Lorg/springframework/web/bind/annotation/RestController;"
+  - "Lorg/springframework/stereotype/Controller;"
+```
+结果
+```
+ ______  __      ______  ______  ______       ______  ______  ______  ______  ______  __  __  ______  ______    
+/\  ___\/\ \    /\  __ \/\___  \/\___  \     /\  ___\/\  ___\/\  __ \/\  == \/\  ___\/\ \_\ \/\  ___\/\  == \   
+\ \ \___\ \ \___\ \  __ \/_/  /_\/_/  /__    \ \___  \ \  __\\ \  __ \ \  __<\ \ \___\ \  __ \ \  __\\ \  __<   
+ \ \_____\ \_____\ \_\ \_\/\_____\/\_____\    \/\_____\ \_____\ \_\ \_\ \_\ \_\ \_____\ \_\ \_\ \_____\ \_\ \_\ 
+  \/_____/\/_____/\/_/\/_/\/_____/\/_____/     \/_____/\/_____/\/_/\/_/\/_/ /_/\/_____/\/_/\/_/\/_____/\/_/ /_/ 
+                                                                                                                
+[main] INFO org.vidar.ClazzSearchApplication - Using JAR classpath: /Users/zhchen/Downloads/github-workspace/d3forest/target/d3forest-1.0-SNAPSHOT.jar
+[main] INFO org.vidar.ClazzSearchApplication - Running method discovery...
+[main] INFO org.vidar.data.InheritanceDeriver - Calculating inheritance for 46001 classes...
+[main] INFO org.vidar.ClazzSearchApplication - Searching target class for yml ...
+ClazzRule(name=null, isInterface=null, extendsList=null, implementsList=null, annotations=[Lorg/springframework/web/bind/annotation/RestController;, Lorg/springframework/stereotype/Controller;], fields=null, methods=[ClazzRule.Method(clazz=null, name=hello, desc=null, access=null, isStatic=null, calls=null)])
+[main] INFO org.vidar.discovery.ClazzDiscovery - 加载所有方法信息完毕...
+[main] INFO org.vidar.discovery.ClazzDiscovery - 加载所有类信息完毕...
+[main] INFO org.vidar.discovery.ClazzDiscovery - 加载所有父子类、超类、实现类关系完毕...
+[main] INFO org.vidar.discovery.ClazzDiscovery - 加载方法调用信息完毕...
+[main] INFO org.vidar.discovery.ClazzDiscovery - 开始寻找目标类...
+[main] INFO org.vidar.discovery.ClazzDiscovery - 你希望target中存在：ClazzRule.Method(clazz=null, name=hello, desc=null, access=null, isStatic=null, calls=null)方法
+以下是搜索结果：
+ClassReference.Handle(name=com/d3ctf/controller/HelloController)
+```
 ### 参数说明
 - --resume 是否使用已建立的数据缓存
 - --f 指定配置yml
@@ -173,3 +201,6 @@ ClassReference.Handle(name=com/sun/rowset/JdbcRowSetImpl)
 - [ ] 更友好的字符格式
 - [ ] 交互式查询
 - [ ] 指定输出路径
+### 开发者说明
+- `mvn clean install`即可以重新打包项目
+- 如对搜索逻辑不满，可提issue或者直接在`ClazzDiscovery`中修改为你的逻辑，代码很通俗
