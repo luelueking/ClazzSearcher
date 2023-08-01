@@ -13,7 +13,7 @@ implementsList:        # target实现的接口，例如"java/io/Serializable"
 annotations:           # target上存在的注解，例如"Lorg/springframework/web/bind/annotation/RestController;"
   - annotation1
   - annotation2
-fields:                # target所有的field属性
+fields:                # target所有的field属性，field之间为与逻辑
   - {
     "name": "request", # field的name
     "access": 2,       # field的访问access
@@ -30,7 +30,7 @@ methods:               # target所拥有的method方法
     "desc": "desc1",   # method的描述符，例如"(Ljava/lang/Object;)V"
     "access": "public", # method的访问修饰符
     "isStatic": false, # method是否是静态方法
-    "calls": [         # method中调用了哪些方法
+    "calls": [         # method中调用了哪些方法, calls之间为或逻辑
       {
         "classRef": "org/springframework/jmx/export/MBeanExporter", # 被调用方法的类
         "name": "addExcludedBean",                                  # 被调用方法的名
