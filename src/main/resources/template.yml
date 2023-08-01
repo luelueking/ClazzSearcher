@@ -1,12 +1,6 @@
-importList:
-  - java.io.File
-  - java.io.IOException
-  - org.apache.log4j.Level
-  - org.*
-
-access : public/protected/default/private
-
 name: "TemplateClazzName"
+
+isInterface: false
 
 type: class interface enum annotation
 

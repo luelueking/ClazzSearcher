@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.regex.Pattern;
 
 /**
  * @author zhchen
@@ -34,22 +35,85 @@ public class ClazzDiscovery {
             filterByMethods(clazzRule);
             flag = true;
         }
+        filterByNameType(clazzRule, flag);
         filterByParent(clazzRule, flag);
         filterByAnnotations(clazzRule, flag);
-        filterByFields(clazzRule,flag);
+        filterByFields(clazzRule, flag);
         System.out.println("以下是搜索结果：");
         res.forEach(System.out::println);
     }
 
     /**
+     * 根据name和type限定过滤
+     *
+     * @param clazzRule
+     * @param flag
+     */
+    private void filterByNameType(ClazzRule clazzRule, boolean flag) {
+        if (flag) { // 被filter过
+            if (res.size() == 0) {
+                return;
+            }
+            Set<ClassReference.Handle> toRemove = new HashSet<>();
+            if (clazzRule.getName() != null) {
+                Pattern pattern = Pattern.compile(clazzRule.getName());
+                for (ClassReference.Handle clz : res) {
+                    String[] split = clz.getName().split("/");
+                    String name = split[split.length - 1];
+                    if (!pattern.matcher(name).matches()) {
+                        toRemove.add(clz);
+                    }
+                }
+            }
+            if (clazzRule.getIsInterface() != null) {
+                for (ClassReference.Handle clz : res) {
+                    if (classMap.get(clz).isInterface() != clazzRule.getIsInterface().booleanValue()) {
+                        toRemove.add(clz);
+                    }
+                }
+            }
+            res.remove(toRemove);
+        } else {
+            flag = true;
+            Set<ClassReference.Handle> toAdd = new HashSet<>();
+            if (clazzRule.getName() != null || clazzRule.getIsInterface() != null) {
+                for (Map.Entry<ClassReference.Handle, ClassReference> next : classMap.entrySet()) {
+                    ClassReference clzRef = next.getValue();
+                    if (clazzRule.getName() != null && clazzRule.getIsInterface() != null) {
+                        String[] split = clzRef.getName().split("/");
+                        String name = split[split.length - 1];
+                        Pattern pattern = Pattern.compile(clazzRule.getName());
+                        if (pattern.matcher(name).matches() && clzRef.isInterface() == clazzRule.getIsInterface().booleanValue()) {
+                            toAdd.add(next.getKey());
+                        }
+                    } else if (clazzRule.getName() != null) {
+                        String[] split = clzRef.getName().split("/");
+                        String name = split[split.length - 1];
+                        Pattern pattern = Pattern.compile(clazzRule.getName());
+                        if (pattern.matcher(name).matches()) {
+                            toAdd.add(next.getKey());
+                        }
+                    } else if (clazzRule.getIsInterface() != null) {
+                        if (clzRef.isInterface() == clazzRule.getIsInterface().booleanValue()) {
+                            toAdd.add(next.getKey());
+                        }
+                    }
+                }
+            }
+            res.addAll(toAdd);
+        }
+    }
+
+    /**
      * 根据field限定过滤
+     *
      * @param clazzRule
      * @param flag
      */
     private void filterByFields(ClazzRule clazzRule, boolean flag) {
         if (flag) { // 被filter过
             if (res.size() == 0) {
-               return;
+                return;
             }
             Set<ClassReference.Handle> toRemove = new HashSet<>();
             List<ClazzRule.Field> fields = clazzRule.getFields();
@@ -57,9 +121,10 @@ public class ClazzDiscovery {
                 for (ClassReference.Handle clz : res) {
                     ClassReference.Member[] members = classMap.get(clz).getMembers();
                     // 需要包含规则中内每个field
-                    a: for (ClazzRule.Field field : fields) {
+                    a:
+                    for (ClazzRule.Field field : fields) {
                         for (ClassReference.Member member : members) {
-                            if (equalsField(field,member)) {
+                            if (equalsField(field, member)) {
                                 continue a;
                             }
                         }
@@ -76,9 +141,10 @@ public class ClazzDiscovery {
                     ClassReference clzRef = next.getValue();
                     ClassReference.Member[] members = clzRef.getMembers();
                     boolean toAdd = true;
-                    a: for (ClazzRule.Field field : fields) {
+                    a:
+                    for (ClazzRule.Field field : fields) {
                         for (ClassReference.Member member : members) {
-                            if (equalsField(field,member)) {
+                            if (equalsField(field, member)) {
                                 continue a;
                             }
                         }

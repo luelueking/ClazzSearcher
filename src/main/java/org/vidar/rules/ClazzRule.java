@@ -9,10 +9,8 @@ import java.util.List;
  */
 @Data
 public class ClazzRule {
-    private List<String> importList;
     private String name;
-    private String access;
-    private String type;
+    private Boolean isInterface;
     private List<String> extendsList;
     private List<String> implementsList;
     private List<String> annotations;
