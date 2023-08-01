@@ -5,59 +5,53 @@
 ### Quick Start
 下面是yml的规则搜索模版(如果不需要引入某条rule则不写)
 ```yaml
-access : public/protected/default/private # target的访问修饰符
-
-name: "TemplateClazzName" # target的类名,支持正则匹配
-
-type: class/interface/enum/annotation # target的类型,四选一
-
-extendsList: # target所继承的类
+name: "targetName" # target的类名，支持正则，例如".*ServiceImpl$"
+isInterface: false     # target是不是接口，true:是
+extendsList:           # target继承的父类，有多个，因为接口可以有多个父接口
   - java.lang.Object
-
-implementsList: # target所实现的接口
+implementsList:        # target实现的接口，例如"java/io/Serializable"
   - interface1
   - interface2
-
-annotations: # target所拥有的注解
+annotations:           # target上存在的注解，例如"Lorg/springframework/web/bind/annotation/RestController;"
   - annotation1
   - annotation2
-
-fields: # target拥有的field
+fields:                # target所有的field属性
   - {
-    "name": "field1",
-    "type": "java.lang.String",
-    "access": public/protected/default/private,
+    "name": "request", # field的name
+    "access": 2,       # field的访问access
+    "type": "type1"    # field的class类型，例如"org/springframework/http/server/reactive/ServerHttpRequest"
   }
   - {
     "name": "field2",
-    "type": "java.lang.Object",
-    "access": public/protected/default/private,
+    "access": 1,
+    "type": "type2"
   }
-methods: # target拥有的method
+methods:               # target所拥有的method方法
   - {
-    "clazz": "clazz1",
-    "name": "method1",
-    "desc": "()Ljava/lang/String;", # method描述
-    "access": false,
-    "call" : [ # method中call的方法
-      {}
+    "name": "m1",      # method的name，例如"excludeMBeanIfNecessary"
+    "desc": "desc1",   # method的描述符，例如"(Ljava/lang/Object;)V"
+    "access": "public",# method的访问修饰符
+    "isStatic": false, # method是否是静态方法
+    "calls": [         # method中调用了哪些方法
+      {
+        "classRef": "org/springframework/jmx/export/MBeanExporter", # 被调用方法的类
+        "name": "addExcludedBean",                                  # 被调用方法的名
+        "desc": "(Ljava/lang/String;)V"                             # 被调用方法的方法描述
+      }
     ]
-
   }
   - {
-    "clazz": "clazz1",
-    "name": "method2",
+    "name": "m2",
     "desc": "(Ljava/io/Reader;)Ljava/lang/Object;",
-    "access": true,
+    "access": "private",
     "call" : [
-      {},{},{}
+      { },{ },...
     ]
   }
+
 ```
 例如下面一段规则
 ```yaml
-access : public
-type: class
 implementsList:
   - org/springframework/beans/PropertyValues
   - java/io/Serializable
@@ -83,8 +77,6 @@ extendsList:
 
 如有下面这段规则
 ```yaml
-access : public
-type: class
 methods:
   - {
     "name": "excludeMBeanIfNecessary",
