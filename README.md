@@ -1,6 +1,14 @@
 # ClazzSearcher
 一款使用Yaml定义搜索规则来搜索Class的工具
 ### Quick Start(快速开始)
+```shell
+# 搜索jar包
+java -jar ClazzSearcher.jar --f example.yml --boot d3forest-1.0-SNAPSHOT.jar
+# 搜索目录
+java -jar ClazzSearcher.jar --f example.yml --boot target/dir/lib
+# 使用缓存
+java -jar ClazzSearcher.jar --resume --f example.yml ....
+```
 下面是yml的规则搜索模版(如果不需要引入某条rule则不写)
 ```yaml
 name: "targetName" # target的类名，支持正则，例如".*ServiceImpl$"
@@ -100,6 +108,48 @@ methods:
 [main] INFO org.vidar.discovery.ClazzDiscovery - 开始寻找目标类...
 [main] INFO org.vidar.discovery.ClazzDiscovery - 你希望target中存在：ClazzRule.Method(clazz=null, name=excludeMBeanIfNecessary, desc=(Ljava/lang/Object;Ljava/lang/String;Lorg/springframework/context/ApplicationContext;)V, access=private, isStatic=false, calls=[ClazzRule.Call(classRef=org/springframework/jmx/export/MBeanExporter, name=addExcludedBean, desc=(Ljava/lang/String;)V)])方法
 找到一个类：ClassReference.Handle(name=org/springframework/boot/autoconfigure/jdbc/JndiDataSourceAutoConfiguration)
+```
+### 实战例子
+寻找一些lookup的sink点
+``` yaml
+methods:
+  - {
+    "name": "connect",
+    "calls": [
+      {
+        "classRef": "javax/naming/Context",
+        "name": "lookup"
+      },
+      {
+        "classRef": "javax/naming/InitialContext",
+        "name": "lookup"
+      }
+    ]
+  }
+```
+运行结果
+```
+
+ ______  __      ______  ______  ______       ______  ______  ______  ______  ______  __  __  ______  ______    
+/\  ___\/\ \    /\  __ \/\___  \/\___  \     /\  ___\/\  ___\/\  __ \/\  == \/\  ___\/\ \_\ \/\  ___\/\  == \   
+\ \ \___\ \ \___\ \  __ \/_/  /_\/_/  /__    \ \___  \ \  __\\ \  __ \ \  __<\ \ \___\ \  __ \ \  __\\ \  __<   
+ \ \_____\ \_____\ \_\ \_\/\_____\/\_____\    \/\_____\ \_____\ \_\ \_\ \_\ \_\ \_____\ \_\ \_\ \_____\ \_\ \_\ 
+  \/_____/\/_____/\/_/\/_/\/_____/\/_____/     \/_____/\/_____/\/_/\/_/\/_/ /_/\/_____/\/_/\/_/\/_____/\/_/ /_/ 
+                                                                                                                
+[main] INFO org.vidar.ClazzSearchApplication - Using JAR classpath: /Users/zhchen/Downloads/github-workspace/d3forest/target/d3forest-1.0-SNAPSHOT.jar
+[main] INFO org.vidar.ClazzSearchApplication - Running method discovery...
+[main] INFO org.vidar.data.InheritanceDeriver - Calculating inheritance for 46001 classes...
+[main] INFO org.vidar.ClazzSearchApplication - Searching target class for yml ...
+ClazzRule(name=null, isInterface=null, extendsList=null, implementsList=null, annotations=null, fields=null, methods=[ClazzRule.Method(clazz=null, name=connect, desc=null, access=null, isStatic=null, calls=[ClazzRule.Call(classRef=javax/naming/Context, name=lookup, desc=null), ClazzRule.Call(classRef=javax/naming/InitialContext, name=lookup, desc=null)])])
+[main] INFO org.vidar.discovery.ClazzDiscovery - 加载所有方法信息完毕...
+[main] INFO org.vidar.discovery.ClazzDiscovery - 加载所有类信息完毕...
+[main] INFO org.vidar.discovery.ClazzDiscovery - 加载所有父子类、超类、实现类关系完毕...
+[main] INFO org.vidar.discovery.ClazzDiscovery - 加载方法调用信息完毕...
+[main] INFO org.vidar.discovery.ClazzDiscovery - 开始寻找目标类...
+[main] INFO org.vidar.discovery.ClazzDiscovery - 你希望target中存在：ClazzRule.Method(clazz=null, name=connect, desc=null, access=null, isStatic=null, calls=[ClazzRule.Call(claavax/naming/Context, name=lookup, desc=null), ClazzRule.Call(classRef=javax/naming/InitialContext, name=lookup, desc=null)])方法
+以下是搜索结果：
+ClassReference.Handle(name=com/sun/rowset/internal/CachedRowSetReader)
+ClassReference.Handle(name=com/sun/rowset/JdbcRowSetImpl)
 ```
 ### 参数说明
 - --resume 是否使用已建立的数据缓存
