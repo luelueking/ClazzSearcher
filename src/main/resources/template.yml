@@ -1,40 +1,40 @@
-name: "TemplateClazzName"
+name: ".*ServiceImpl$"
 
 isInterface: false
-
-type: class interface enum annotation
 
 extendsList:
   - java.lang.Object
 
 implementsList:
-  - interface1
+  - "java/io/Serializable"
   - interface2
 annotations:
-  - annotation1
+  - "Lorg/springframework/web/bind/annotation/RestController;"
   - annotation2
 
 fields:
   - {
-    "name": "field1",
-    "type": "java.lang.String",
-    "access": public/protected/default/private,
+    "name": "request",
+    "access": 2,
+    "type": "org/springframework/http/server/reactive/ServerHttpRequest"
   }
   - {
     "name": "field2",
-    "type": "java.lang.Object",
-    "access": public/protected/default/private,
+    "access": 1,
+    "type": "field的class类型"
   }
 methods:
   - {
-    "clazz": "clazz1",
-    "name": "method1",
-    "desc": "()Ljava/lang/String;",
-    "isStatic": true,
-    "access": false,
-    "call" : [
-      "java/lang/reflect/Method.invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;",
-      "org/xml/sax/helpers/XMLFilterImpl.parse(Lorg/xml/sax/InputSource;)V",
+    "name": "excludeMBeanIfNecessary",
+    "desc": "(Ljava/lang/Object;Ljava/lang/String;Lorg/springframework/context/ApplicationContext;)V",
+    "access": "private",
+    "isStatic": false,
+    "calls": [
+      {
+        "classRef": "org/springframework/jmx/export/MBeanExporter",
+        "name": "addExcludedBean",
+        "desc": "(Ljava/lang/String;)V"
+      }
     ]
   }
   - {
@@ -43,6 +43,6 @@ methods:
     "desc": "(Ljava/io/Reader;)Ljava/lang/Object;",
     "access": true,
     "call" : [
-      "javax/xml/ws/EndpointReference.toString()Ljava/lang/String;"
+      { },{ },...
     ]
   }

@@ -1,5 +1,3 @@
-access : public
-type: class
 implementsList:
   - org/springframework/beans/PropertyValues
   - java/io/Serializable

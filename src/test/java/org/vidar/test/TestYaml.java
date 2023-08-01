@@ -11,7 +11,7 @@ public class TestYaml {
         // 读取 YAML 文件
 //        FileInputStream input = new FileInputStream("/Users/zhchen/Downloads/github-workspace/ClazzSearcher/src/main/resources/template.yml");
 //        FileInputStream input = new FileInputStream("/Users/zhchen/Downloads/github-workspace/ClazzSearcher/src/main/resources/parent.yml");
-//        FileInputStream input = new FileInputStream("/Users/zhchen/Downloads/github-workspace/ClazzSearcher/src/main/resources/Annotations.yml");
+//        FileInputStream input = new FileInputStream("/Users/zhchen/Downloads/github-workspace/ClazzSearcher/src/main/resources/annotation.yml");
         FileInputStream input = new FileInputStream("/Users/zhchen/Downloads/github-workspace/ClazzSearcher/src/main/resources/name.yml");
         // 创建 SnakeYAML 解析器
         Yaml yaml = new Yaml();

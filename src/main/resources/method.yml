@@ -1,5 +1,3 @@
-access : public
-type: class
 methods:
   - {
     "name": "excludeMBeanIfNecessary",
