@@ -46,6 +46,7 @@ public class ClazzDiscovery {
             if (res.size() == 0) {
                 return;
             }
+            Set<ClassReference.Handle> toRemove = new HashSet<>();
             List<String> annotations = clazzRule.getAnnotations();
             if (annotations != null && annotations.size() != 0) {
                 for (ClassReference.Handle clz : res) {
@@ -53,9 +54,12 @@ public class ClazzDiscovery {
                     Set<String> clzAnnotations = classReference.getAnnotations();
                     for (String annotation : annotations) {
                         if (!clzAnnotations.contains(annotation)) {
-                            res.remove(clz);
+                            toRemove.add(clz);
                         }
                     }
+                }
+                if (toRemove.size() != 0) {
+                    res.removeAll(toRemove);
                 }
             }
         } else {
