@@ -34,8 +34,9 @@ public class ClazzSearchApplication {
     }
 
     public static void main(String[] args) throws IOException {
+        printLOGO();
         if (args.length == 0) {
-            // TODO 添加printUsage
+            printUsage();
             System.exit(1);
         }
 
@@ -100,6 +101,16 @@ public class ClazzSearchApplication {
             //捕获异常，避免异常导致程序终止
         }
 
+    }
+
+    private static void printLOGO() {
+        System.out.print(" ______  __      ______  ______  ______       ______  ______  ______  ______  ______  __  __  ______  ______    \n" +
+                "/\\  ___\\/\\ \\    /\\  __ \\/\\___  \\/\\___  \\     /\\  ___\\/\\  ___\\/\\  __ \\/\\  == \\/\\  ___\\/\\ \\_\\ \\/\\  ___\\/\\  == \\   \n" +
+                "\\ \\ \\___\\ \\ \\___\\ \\  __ \\/_/  /_\\/_/  /__    \\ \\___  \\ \\  __\\\\ \\  __ \\ \\  __<\\ \\ \\___\\ \\  __ \\ \\  __\\\\ \\  __<   \n" +
+                " \\ \\_____\\ \\_____\\ \\_\\ \\_\\/\\_____\\/\\_____\\    \\/\\_____\\ \\_____\\ \\_\\ \\_\\ \\_\\ \\_\\ \\_____\\ \\_\\ \\_\\ \\_____\\ \\_\\ \\_\\ \n" +
+                "  \\/_____/\\/_____/\\/_/\\/_/\\/_____/\\/_____/     \\/_____/\\/_____/\\/_/\\/_/\\/_/ /_/\\/_____/\\/_/\\/_/\\/_____/\\/_/ /_/ \n" +
+                "                                                                                                                ");
+        System.out.println();
     }
 
 
@@ -182,5 +193,16 @@ public class ClazzSearchApplication {
             }
         }
         return classLoader;
+    }
+
+    public static void printUsage() {
+        System.out.println("Usage:");
+        System.out.println("java -jar ClazzSearcher.jar [options]");
+        System.out.println("");
+        System.out.println("Options:");
+        System.out.println("--resume\t\tWhether to use existing data cache");
+        System.out.println("--f <config.yml>\tSpecify the configuration YAML file");
+        System.out.println("--onlyJDK\t\tFilter only in JDK");
+        System.out.println("--boot\t\tWhether it is a Spring Boot JAR");
     }
 }
