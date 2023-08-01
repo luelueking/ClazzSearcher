@@ -311,20 +311,22 @@ public class ClazzDiscovery {
                         continue;
                     }
                     is.set(true);
-                    if (m.getCalls() != null) {
+                    boolean isCalls = false;
+                    if (m.getCalls() != null) { // 或逻辑
                         GraphCall graphCall = callMap.get(key);
                         List<MethodReference.Handle> callMethods = graphCall.getCallMethods();
                         out:
-                        for (ClazzRule.Call call : m.getCalls()) {
-                            for (MethodReference.Handle callMethod : callMethods) {
+                        for (MethodReference.Handle callMethod : callMethods) {
+                            for (ClazzRule.Call call : m.getCalls()) {
                                 if (callMethod.getClassReference().getName()!=null ? callMethod.getClassReference().getName().equals(call.getClassRef()):true &&
                                         callMethod.getName()!=null ? callMethod.getName().equals(call.getName()):true &&
                                         callMethod.getDesc()!=null ? callMethod.getDesc().equals(call.getDesc()):true) {
-                                    continue out;
+                                    isCalls = true;
+                                    break out;
                                 }
                             }
-                            is.set(false);
                         }
+                        is.set(is.get() && isCalls);
                     }
                     break;
                 }
