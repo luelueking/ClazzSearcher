@@ -1,0 +1,14 @@
+methods:
+  - {
+    "name": "connect",
+    "desc": "()Ljava/sql/Connection;",
+    "access": "private",
+    "isStatic": false,
+    "calls": [
+      {
+        "classRef": "javax/naming/Context",
+        "name": "lookup",
+        "desc": "(Ljava/lang/String;)Ljava/lang/Object;"
+      }
+    ]
+  }

@@ -317,9 +317,9 @@ public class ClazzDiscovery {
                         out:
                         for (ClazzRule.Call call : m.getCalls()) {
                             for (MethodReference.Handle callMethod : callMethods) {
-                                if (callMethod.getClassReference().getName().equals(call.getClassRef()) &&
-                                        callMethod.getName().equals(call.getName()) &&
-                                        callMethod.getDesc().equals(call.getDesc())) {
+                                if (callMethod.getClassReference().getName()!=null ? callMethod.getClassReference().getName().equals(call.getClassRef()):true &&
+                                        callMethod.getName()!=null ? callMethod.getName().equals(call.getName()):true &&
+                                        callMethod.getDesc()!=null ? callMethod.getDesc().equals(call.getDesc()):true) {
                                     continue out;
                                 }
                             }
