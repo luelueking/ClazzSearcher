@@ -108,13 +108,17 @@ public class ClazzDiscovery {
                     parentLists.add(p);
                 });
             }
+            Set<ClassReference.Handle> toRemove = new HashSet<>();
             if (parentLists.size() != 0) {
                 for (ClassReference.Handle clz : res) {
                     for (String parent : parentLists) {
                         if (!inheritanceMap.isSubclassOf(clz, new ClassReference.Handle(parent))) {
-                            res.remove(clz);
+                            toRemove.add(clz);
                         }
                     }
+                }
+                if (toRemove.size() != 0) {
+                    res.removeAll(toRemove);
                 }
             }
         } else { // 没有被filter过
