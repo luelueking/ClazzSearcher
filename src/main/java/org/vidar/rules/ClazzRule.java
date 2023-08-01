@@ -23,8 +23,8 @@ public class ClazzRule {
     @Data
     public static class Field {
         private String name;
+        private Integer access;
         private String type;
-        private String access;
     }
 
     @Data

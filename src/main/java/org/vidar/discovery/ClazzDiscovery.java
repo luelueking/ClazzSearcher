@@ -36,8 +36,74 @@ public class ClazzDiscovery {
         }
         filterByParent(clazzRule, flag);
         filterByAnnotations(clazzRule, flag);
+        filterByFields(clazzRule,flag);
         System.out.println("以下是搜索结果：");
         res.forEach(System.out::println);
+    }
+
+    /**
+     * 根据field限定过滤
+     * @param clazzRule
+     * @param flag
+     */
+    private void filterByFields(ClazzRule clazzRule, boolean flag) {
+        if (flag) { // 被filter过
+            if (res.size() == 0) {
+               return;
+            }
+            Set<ClassReference.Handle> toRemove = new HashSet<>();
+            List<ClazzRule.Field> fields = clazzRule.getFields();
+            if (fields != null && fields.size() != 0) {
+                for (ClassReference.Handle clz : res) {
+                    ClassReference.Member[] members = classMap.get(clz).getMembers();
+                    // 需要包含规则中内每个field
+                    a: for (ClazzRule.Field field : fields) {
+                        for (ClassReference.Member member : members) {
+                            if (equalsField(field,member)) {
+                                continue a;
+                            }
+                        }
+                        toRemove.add(clz);
+                    }
+                }
+                res.removeAll(toRemove);
+            }
+        } else { // 没被filter过
+            flag = true;
+            List<ClazzRule.Field> fields = clazzRule.getFields();
+            if (fields != null && fields.size() != 0) {
+                for (Map.Entry<ClassReference.Handle, ClassReference> next : classMap.entrySet()) {
+                    ClassReference clzRef = next.getValue();
+                    ClassReference.Member[] members = clzRef.getMembers();
+                    boolean toAdd = true;
+                    a: for (ClazzRule.Field field : fields) {
+                        for (ClassReference.Member member : members) {
+                            if (equalsField(field,member)) {
+                                continue a;
+                            }
+                        }
+                        toAdd = false;
+                    }
+                    if (toAdd) {
+                        res.add(next.getKey());
+                    }
+                }
+            }
+        }
+    }
+
+    private boolean equalsField(ClazzRule.Field field, ClassReference.Member member) {
+        boolean res = true;
+        if (null != field.getAccess() && field.getAccess() != member.getModifiers()) {
+            res = false;
+        }
+        if (null != field.getName() && !field.getName().equals(member.getName())) {
+            res = false;
+        }
+        if (null != field.getType() && !field.getType().equals(member.getType().getName())) {
+            res = false;
+        }
+        return res;
     }
 
     private void filterByAnnotations(ClazzRule clazzRule, boolean flag) {
@@ -63,6 +129,7 @@ public class ClazzDiscovery {
                 }
             }
         } else {
+            flag = true;
             List<String> annotations = clazzRule.getAnnotations();
             if (annotations != null && annotations.size() != 0) {
                 for (Map.Entry<ClassReference.Handle, ClassReference> next : classMap.entrySet()) {
@@ -122,6 +189,7 @@ public class ClazzDiscovery {
                 }
             }
         } else { // 没有被filter过
+            flag = true;
             List<String> parentLists = new ArrayList<>();
             if (clazzRule.getImplementsList() != null && clazzRule.getImplementsList().size() != 0) {
                 LOGGER.info("你所寻找的class实现的接口有：");
@@ -204,16 +272,16 @@ public class ClazzDiscovery {
     private void init() throws IOException {
         // 加载所有方法信息
         methodMap = DataLoader.loadMethods();
-        LOGGER.info("加载所有方法信息完毕");
+        LOGGER.info("加载所有方法信息完毕...");
         // 加载所有类信息
         classMap = DataLoader.loadClasses();
-        LOGGER.info("加载所有类信息完毕");
+        LOGGER.info("加载所有类信息完毕...");
         // 加载所有父子类、超类、实现类关系
         inheritanceMap = InheritanceMap.load();
-        LOGGER.info("加载所有父子类、超类、实现类关系");
+        LOGGER.info("加载所有父子类、超类、实现类关系完毕...");
         // 加载方法调用信息
         callMap = DataLoader.loadCalls();
-        LOGGER.info("加载方法调用信息完毕");
+        LOGGER.info("加载方法调用信息完毕...");
     }
 
 }
