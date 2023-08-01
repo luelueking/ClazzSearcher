@@ -2,7 +2,7 @@
 一款使用Yaml定义搜索规则来搜索Class的工具
 ### TODOList
 - 还很多没做，还在开发ing
-### Quick Start
+### Quick Start(快速开始)
 下面是yml的规则搜索模版(如果不需要引入某条rule则不写)
 ```yaml
 name: "targetName" # target的类名，支持正则，例如".*ServiceImpl$"
@@ -50,6 +50,7 @@ methods:               # target所拥有的method方法
   }
 
 ```
+### Use Case(使用案例)
 例如下面一段规则
 ```yaml
 implementsList:
@@ -103,7 +104,7 @@ methods:
 找到一个类：ClassReference.Handle(name=org/springframework/boot/autoconfigure/jdbc/JndiDataSourceAutoConfiguration)
 ```
 ### 参数说明
---resume 是否使用已建立的数据缓存
---f 指定配置yml
---onlyJDK 是否只在jdk中筛选
---boot 是否是springboot的jar
+- --resume 是否使用已建立的数据缓存
+- --f 指定配置yml
+- --onlyJDK 是否只在jdk中筛选
+- --boot 是否是springboot的jar
